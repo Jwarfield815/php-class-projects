@@ -29,7 +29,11 @@ $statement->closeCursor();
             <th>&nbsp;</th>
         </tr>
         
-        <!-- add code for the rest of the table here -->
+        <!--
+            add code for the rest of the table here 
+            a loop that adds a new cell to the table for every category
+        -->
+
         <?php foreach($categories as $category) : ?>
         <tr>
             <td><?php echo $category['categoryName'] ?></td>
@@ -45,7 +49,10 @@ $statement->closeCursor();
 
     <h2>Add Category</h2>
     
-    <!-- add code for the form here -->
+    <!--
+        add code for the form here
+        form that adds new categories created by the user
+    -->
     <form action="add_category.php" method="post"
               id="add_category_form">
 
