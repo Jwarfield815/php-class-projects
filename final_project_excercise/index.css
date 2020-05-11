@@ -1,0 +1,29 @@
+h3 {
+  font-family: TimesNewRoman; 
+  font-size: 25pt;         
+  font-style: normal; 
+  font-weight: bold; 
+  color:lightskyblue;
+  text-align: center; 
+  text-decoration: underline;
+}
+
+table {
+  font-family: TimesNewRoman; 
+  color:grey;
+  font-size: 11pt; 
+  font-style: normal;
+  font-weight: bold;
+  /* text-align:;  */
+  background-color:lightskyblue; 
+  border-collapse: collapse; 
+  border: 2px black
+}
+
+table.inner {
+  border: 0px
+}
+
+body { 
+  background-color: grey;
+}
