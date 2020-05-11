@@ -10,7 +10,23 @@
 var entries = []; // holds the user's list of entries
 var form = document.getElementsByTagName("form")[0]; // holds the student registration form
 var successMessage = document.getElementById("submitSuccess"); // used to display a success message when the
-// user successfully submits an entry
+                                                               // user successfully submits an entry
+// a list of state abbreviations
+var states = ['AL', 'MO', 'AK', 'MT', 'AZ', 'NE', 'AR', 'NV', 'CA', 'NH', 'CO', 'NJ', 'CT', 'NM', 'DE', 'NY', 'DC', 'NC', 'FL', 'ND', 'GA', 'OH', 'HI', 'OK', 'ID', 'OR', 'IL', 'PA', 'IN', 'RI', 'IA', 'SC', 'KS', 'SD', 'KY', 'TN', 'LA', 'TX', 'ME', 'UT', 'MD', 'VT', 'MA', 'VA', 'MI', 'WA', 'MN', 'WV', 'MS', 'WI', 'WY'];
+
+// when the window loads, add the years from the current year to 1945 as options to the Birthday_Year select element
+window.addEventListener('load', (event) => {
+  const options = document.getElementById('Birthday_Year');
+  let option;
+
+  for (let counter = new Date().getFullYear(); counter >= 1945; counter--) {
+    option = document.createElement('option');
+    option.value = counter;
+    option.textContent = counter;
+
+    options.appendChild(option);
+  }
+});
 
 /**
  * takes the fields from the form and ensures the requirements are met, specifically:
@@ -28,21 +44,14 @@ function ensureRequirementsAreMet(elements) {
 
   elements.forEach(element => {
     var { name, value } = element;
-    var smaller = 2 * 27;
-    var larger = smaller + 2 * 11;
-    console.log(smaller / larger);
-    console.log(smaller, larger);
-    var anotherOne = 100 - larger;
-    console.log((smaller + anotherOne) / (larger + anotherOne));
-    console.log(smaller / (larger + anotherOne));
 
     // checks if it is one of the required fields and if the field has a value
     // if the required field is not filled, then it adds to the error message
     if (name === "First_Name" && value === "") {
       errorMessage += "\nYou must include a first name.";
-    } else if (name === "Last_Name" && value === "") {
+    } if (name === "Last_Name" && value === "") {
       errorMessage += "\nYou must include a last name.";
-    } else { // if all the required fields are filled, then we do more, lesser priority checks
+    } if (errorMessage === 'Error: not all of the required fields were provided.') { // if all the required fields are filled, then we do more, lesser priority checks
       var numOfChars; // holds the number of alphabetical characters in the field
       var numOfNums; // holds the number of numerical characters in the field
       var lengthOfField = value.length || 0; // holds the length of the total field
@@ -74,10 +83,14 @@ function ensureRequirementsAreMet(elements) {
         errorMessage = `Error: field ${name} must use only numbers`;
       } else if (name === "Mobile_Number" && lengthOfField !== 10 && lengthOfField !== 0) {
         errorMessage = "Error: field Mobile Number must be 10 numbers.";
-      } else if ((name === "First_Name" || name === "Last_Name" || name === "City" || name === "State") && value.length > 30) {
+      } else if ((name === "First_Name" || name === "Last_Name" || name === "City") && value.length > 30) {
         errorMessage = `Error: field ${name} must have at least 30 characters.`;
       } else if ((name === "First_Name" || name === "Last_Name" || name === "City" || name === "State") && numOfChars < lengthOfField) {
         errorMessage = `Error: field ${name} must use only letters`;
+      } else if (name === 'State' && value.length !== 2 && value.length > 0) {
+        errorMessage = 'Error: field State must consist of 2 characters';
+      } else if (name === 'State' && value.length === 2 && !states.some(state => state === value.toUpperCase())) {
+        errorMessage = 'Error: field State must match a state abbreviation.';
       }
     }
   });
@@ -190,30 +203,23 @@ document.getElementById("submitAll").addEventListener("click", (event) => {
     entries.pop();
     window.alert(errorMessage);
     successMessage.innerHTML = "";
-  } else { // if the required fields were filled or there is no entry added, ensure there are entries in the entries array and display them
+  } else if (entries.length === 0) { // if there have been no entries submitted, display an error message
+    window.alert("Error: no entries have been submitted.");
+    successMessage.innerHTML = "";
+  } else { // if the required fields were filled format and display the entries
     var entriesString = "";
-
-    // tries to fill the entries string with a formatted version of the submitted entries
-    try {
-      entries.forEach(entry => {
-        entry.forEach((field) => {
-          entriesString += `<div style='font-family:TimesNewRoman;color:grey;font-size:11pt;font-style:normal;font-weight:bold;text-align:center;background-color:lightskyblue;'>
+    // fills the entries string with a formatted version of the submitted entries
+    entries.forEach(entry => {
+      entry.forEach((field) => {
+        entriesString += `<div style='font-family:TimesNewRoman;color:grey;font-size:11pt;font-style:normal;font-weight:bold;text-align:center;background-color:lightskyblue;'>
             ${field.name.replace("_", " ")}: ${field.value}
             </div>`;
-        });
-
-        entriesString += "<br />";
       });
-    } catch (error) { // if there are no entries (and entries.forEach will return an error), show an error message
-      entries.pop();
-      window.alert("Error: no entries have been submitted.");
-      successMessage.innerHTML = "";
-    } finally {
-      // if there was a list of entries, then display the entries string as HTML
-      if (entriesString !== "") {
-        document.write(entriesString);
-        document.getElementsByTagName('html')[0].style.backgroundColor = 'gray';
-      }
-    }
+      entriesString += "<br />";
+    });
+
+    // display the entries string as HTML
+    document.write(entriesString);
+    document.getElementsByTagName('html')[0].style.backgroundColor = 'gray';
   }
 });
