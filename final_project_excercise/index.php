@@ -8,22 +8,25 @@
 -->
 
 <html>
-<img src="RoyalHolloway.jpg" alt="RoyalHolloway" style="float:left" width="600" height="333"> &nbsp;
-<img src="emily-davison-building.jpg" alt="emily-davison-building" width="600" height="333"> &nbsp;
-<img src="SideBuilding.jpg" alt="SideBuilding" width="600" height="333">
 
 <head>
   <link rel="stylesheet" href="index.css">
   <title>Student Registration Form</title>
-
 </head>
 
 <body>
   <center>
     <h3>STUDENT REGISTRATION FORM</h3>
 
+    <div id="message">
+      <?php
+        if (array_key_exists('message', $_GET)) {
+          echo str_replace('<', '', $_GET['message']);
+        }
+      ?>
+    </div>
 
-    <form>
+    <form action='addToDatabase.php' method='post'>
       <table align="center" cellpadding="10">
 
         <!----- First Name ---------------------------------------------------------->
@@ -47,7 +50,7 @@
           <td>DATE OF BIRTH</td>
 
           <td>
-            <select name="Birthday_day" id="Birthday_Day">
+            <select name="Birthday_Day" id="Birthday_Day">
               <option value="-1">Day:</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -104,6 +107,11 @@
 
             <select name="Birthday_Year" id="Birthday_Year">
               <option value="-1">Year:</option>
+              <?php
+                for ($i = date("Y"); $i >= 1945; $i--) {
+                  echo "<option value=" . $i . ">" . $i . "</option>";
+                }
+              ?>
             </select>
           </td>
         </tr>
@@ -146,19 +154,19 @@
           </td>
         </tr>
 
-        <!----- Pin Code ---------------------------------------------------------->
-        <tr>
-          <td>PIN CODE</td>
-          <td><input type="text" name="Pin_Code" maxlength="6" />
-            (6 digit number)
-          </td>
-        </tr>
-
         <!----- State ---------------------------------------------------------->
         <tr>
           <td>STATE</td>
           <td><input type="text" name="State" maxlength="2" />
             (must be 2 characters long)
+          </td>
+        </tr>
+
+        <!----- Zip Code ---------------------------------------------------------->
+        <tr>
+          <td>ZIP CODE</td>
+          <td><input type="text" name="Zip_Code" maxlength="6" />
+            (6 digit number)
           </td>
         </tr>
 
@@ -178,52 +186,41 @@
         <tr>
           <td>COURSES</td>
           <td>
-            <select name='Courses'>
-              <option value='-1'>Courses</option>
-
-              <option value='BSAD 127'>BSAD 127</option>
-              <option value='CHEM 107'>CHEM 107</option>
-              <option value='COLL 100'>COLL 100</option>
-              <option value='COMM 100'>COMM 100</option>
-              <option value='CSIS 110'>CSIS 110</option>
-              <option value='CSIS 115'>CSIS 115</option>
-              <option value='CSIS 123'>CSIS 123</option>
-              <option value='CSIS 128'>CSIS 128</option>
-              <option value='CSIS 143'>CSIS 143</option>
-              <option value='CSIS 152'>CSIS 152</option>
-              <option value='CSIS 161'>CSIS 161</option>
-              <option value='CSIS 170'>CSIS 170</option>
-              <option value='CSIS 222'>CSIS 222</option>
-              <option value='CSIS 223'>CSIS 223</option>
-              <option value='CSIS 228'>CSIS 228</option>
-              <option value='CSIS 279'>CSIS 279</option>
-              <option value='CSIS 290'>CSIS 290</option>
-              <option value='ENGL 101'>ENGL 101</option>
-              <option value='ENGL 215'>ENGL 215</option>
-              <option value='ENGL 218'>ENGL 218</option>
-              <option value='HIST 121'>HIST 121</option>
-              <option value='MATH 120'>MATH 120</option>
-            </select>
+            <input type='checkbox' name='Courses[]' value='BSAD 127'>BSAD 127</input>
+            <input type='checkbox' name='Courses[]' value='CHEM 107'>CHEM 107</input>
+            <input type='checkbox' name='Courses[]' value='COLL 100'>COLL 100</input>
+            <input type='checkbox' name='Courses[]' value='COMM 100'>COMM 100</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 110'>CSIS 110</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 115'>CSIS 115</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 123'>CSIS 123</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 128'>CSIS 128</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 143'>CSIS 143</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 152'>CSIS 152</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 161'>CSIS 161</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 170'>CSIS 170</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 222'>CSIS 222</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 223'>CSIS 223</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 228'>CSIS 228</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 279'>CSIS 279</input>
+            <input type='checkbox' name='Courses[]' value='CSIS 290'>CSIS 290</input>
+            <input type='checkbox' name='Courses[]' value='ENGL 101'>ENGL 101</input>
+            <input type='checkbox' name='Courses[]' value='ENGL 215'>ENGL 215</input>
+            <input type='checkbox' name='Courses[]' value='ENGL 218'>ENGL 218</input>
+            <input type='checkbox' name='Courses[]' value='HIST 121'>HIST 121</input>
+            <input type='checkbox' name='Courses[]' value='MATH 120'>MATH 120</input>
           </td>
-        </tr>
-
-        <!----- Submit Success Message ------------------------------------------->
-        <tr>
-          <td id="submitSuccess"></td>
         </tr>
 
         <!----- Submit and Reset ------------------------------------------------->
         <tr>
-          <td colspan="3" align="center">
+          <td colspan="2" align="center">
             <input type="submit" value="Submit">
             <input type="reset" value="Reset">
-            <input id="submitAll" type="button" value="Submit All Entries">
           </td>
         </tr>
       </table>
-
     </form>
-    <script src="index.js"></script>
+    <script src='index.js'></script>
 </body>
 
 </html>

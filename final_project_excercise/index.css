@@ -21,9 +21,17 @@ table {
 }
 
 table.inner {
-  border: 0px
+  border: 0px;
 }
 
 body { 
   background-color: grey;
+}
+
+div#message {
+  margin-bottom: 10px;
+  font-size: 20pt;
+  font-weight: bold;
+  font-family: TimesNewRoman;
+  color: rgb(255, 199, 125);
 }
